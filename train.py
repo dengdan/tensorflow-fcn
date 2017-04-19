@@ -9,7 +9,7 @@ import numpy as np
 import logging
 import sys
 import time
-import fcn8_vgg
+import fcn12_vgg
 import util
 util.proc.set_proc_name('fcn');
 
@@ -31,7 +31,7 @@ learning_rate = 1e-8
 momentum = 0.9
 weight_decay = 5e-4
 max_steps = 10000000
-train_dir = '/home/dengdan/temp_nfs/tensorflow/fcn'
+train_dir = '/home/dengdan/temp_nfs/tensorflow/fcn12s'
 device = '/cpu:0'
 
 
@@ -47,11 +47,11 @@ with tf.Graph().as_default():
             sampled_image, sampled_mask, sampled_bboxes = fn(images, labels, bboxes, out_shape);
             sampled_images = tf.expand_dims(sampled_image, 0)
             sampled_masks = tf.expand_dims(sampled_mask, 0)        
-            vgg_fcn = fcn8_vgg.FCN8VGG(vgg16_npy_path='/home/dengdan/models/vgg/vgg16.npy', weight_decay = weight_decay)
+            vgg_fcn = fcn12_vgg.FCN(vgg16_npy_path='/home/dengdan/models/vgg/vgg16.npy', weight_decay = weight_decay)
             vgg_fcn.build(sampled_images, labels = sampled_masks, debug=True, train = True)
             opt_vars = [];
                     
-            static_layers = ['conv1', 'conv2', 'conv3', 'conv4']
+            static_layers = ['conv1', 'conv2', 'conv3']
             for v in tf.trainable_variables():
                 if util.str.starts_with(v.name, static_layers):
                     continue
@@ -89,6 +89,6 @@ with tf.Graph().as_default():
                 summary_writer.add_summary(summary, step)
                 end = time.time();
                 print "Step %d, loss = %f, time used:%s seconds"%(step, loss, end - start)          
-                if (step + 1)%5000 == 0:
-                    saver.save(sess, util.io.join_path(train_dir, 'vgg16-fcn8s-iter-%d.ckpt'%(step + 1)));
+                if step %5000 == 0:
+                    saver.save(sess, util.io.join_path(train_dir, 'vgg16-fcn8s-iter-%d.ckpt'%(step)));
                     

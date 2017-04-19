@@ -9,7 +9,7 @@ import numpy as np
 import logging
 import sys
 import time
-import fcn8_vgg
+from fcn12_vgg import FCN
 import util
 util.proc.set_proc_name('fcn');
 
@@ -24,7 +24,7 @@ import tensorflow as tf
 import time
 import util
 util.proc.set_proc_name('fcn-test');
-train_dir = '/home/dengdan/temp_nfs/tensorflow/fcn'
+train_dir = '/home/dengdan/temp_nfs/tensorflow/fcn12s'
 device = '/cpu:0'
 data_dir = '/home/dengdan/temp_nfs/no-use/fsns'
 
@@ -34,7 +34,7 @@ with tf.Graph().as_default():
             out_shape = [150, 150]
             images = tf.placeholder("float", name = 'images', shape = [None, None, 3])
             input_images = tf.expand_dims(images, 0)
-            vgg_fcn = fcn8_vgg.FCN8VGG(vgg16_npy_path='/home/dengdan/models/vgg/vgg16.npy')
+            vgg_fcn = FCN(vgg16_npy_path='/home/dengdan/models/vgg/vgg16.npy')
             vgg_fcn.build(input_images, train = False)
             print('Finished building Network.')
             
