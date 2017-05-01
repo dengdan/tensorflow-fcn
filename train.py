@@ -31,7 +31,7 @@ learning_rate = 1e-8
 momentum = 0.9
 weight_decay = 5e-4
 max_steps = 10000000
-train_dir = '/home/dengdan/temp_nfs/tensorflow/fcn12s'
+train_dir = '/home/dengdan/temp_nfs/tensorflow/fcn12s-rescaled'
 device = '/cpu:0'
 
 
